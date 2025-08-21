@@ -233,13 +233,106 @@ class BankingPresentation {
     handleDocumentView(documentItem) {
         const documentName = documentItem.querySelector('span').textContent;
         
-        // Simulate document viewing
-        const modal = this.createDocumentModal(documentName);
-        document.body.appendChild(modal);
+        // Map document names to actual PDF files
+        const documentMap = {
+            'Project Report': 'documents/financial/Project_Report.pdf',
+            '7-Year Financial Projections': 'data/pl_projections.csv', // CSV file
+            'Balance Sheet Projections': 'data/balance_sheet_projections.csv', // CSV file
+            'Mining Permits': 'documents/legal/Mining_Permits.pdf',
+            'GST Registration': 'documents/legal/GST_Registration.pdf',
+            'PAN Card': 'documents/legal/PAN_Card.pdf',
+            'Lease Agreement': 'documents/legal/Lease_Agreement.pdf',
+            'Purchase Orders': 'documents/commercial/Purchase_Orders.pdf',
+            'Loan Application': 'documents/financial/Loan_Application.pdf'
+        };
         
-        setTimeout(() => {
-            modal.classList.add('show');
-        }, 10);
+        const documentPath = documentMap[documentName];
+        
+        if (documentPath) {
+            if (documentPath.endsWith('.pdf')) {
+                // Open PDF in new tab
+                window.open(documentPath, '_blank');
+            } else if (documentPath.endsWith('.csv')) {
+                // Show CSV data in modal
+                this.showCSVModal(documentName, documentPath);
+            }
+        } else {
+            // Fallback to modal for documents not yet linked
+            const modal = this.createDocumentModal(documentName);
+            document.body.appendChild(modal);
+            
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+        }
+    }
+
+    // Show CSV data in a modal
+    async showCSVModal(documentName, csvPath) {
+        try {
+            const response = await fetch(csvPath);
+            const csvText = await response.text();
+            const lines = csvText.trim().split('\n');
+            
+            const modal = document.createElement('div');
+            modal.className = 'document-modal';
+            modal.innerHTML = `
+                <div class="modal-backdrop"></div>
+                <div class="modal-content" style="max-width: 800px;">
+                    <div class="modal-header">
+                        <h3><i class="fas fa-file-csv"></i> ${documentName}</h3>
+                        <button class="modal-close"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="csv-preview">
+                            <table class="data-table" style="font-size: 14px;">
+                                <thead>
+                                    <tr>
+                                        ${lines[0].split(',').map(header => `<th>${header.trim()}</th>`).join('')}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${lines.slice(1).map(line => `
+                                        <tr>
+                                            ${line.split(',').map(cell => `<td>${cell.trim()}</td>`).join('')}
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-actions" style="margin-top: 20px; text-align: center;">
+                            <a href="${csvPath}" download class="btn btn--primary">
+                                <i class="fas fa-download"></i> Download CSV
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Add close functionality
+            const closeBtn = modal.querySelector('.modal-close');
+            const backdrop = modal.querySelector('.modal-backdrop');
+            
+            const closeModal = () => {
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(modal);
+                }, 300);
+            };
+            
+            closeBtn.addEventListener('click', closeModal);
+            backdrop.addEventListener('click', closeModal);
+            
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+            
+        } catch (error) {
+            console.error('Error loading CSV:', error);
+            this.showNotification('Error loading document', 'error');
+        }
     }
 
     createDocumentModal(documentName) {
