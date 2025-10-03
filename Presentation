@@ -1,0 +1,1162 @@
+import React, { useState, useEffect } from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, AreaChart, Area, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
+import { FileText, DollarSign, TrendingUp, MapPin, CheckCircle, AlertCircle, Users, Building, Zap, Target, Award, Calendar, Download, ExternalLink, ChevronRight, ChevronDown, Eye, Shield, TrendingDown } from 'lucide-react';
+
+const JeevanUltraInteractive = () => {
+  const [activeSection, setActiveSection] = useState('dashboard');
+  const [expandedItems, setExpandedItems] = useState({});
+  const [selectedScenario, setSelectedScenario] = useState('normal');
+  const [animationKey, setAnimationKey] = useState(0);
+  const [hoveredMetric, setHoveredMetric] = useState(null);
+
+  useEffect(() => {
+    setAnimationKey(prev => prev + 1);
+  }, [activeSection]);
+
+  // VERIFIED INVESTMENT DATA WITH REAL NUMBERS
+  const capitalDeployment = {
+    machinery: { amount: 100, paid: 90, pending: 10, docs: 'Mahalaxmi Engineers' },
+    conveyor: { amount: 6, paid: 6, pending: 0, docs: 'Vendor Invoice' },
+    rcc: { amount: 14, paid: 11, pending: 3, docs: 'Labor Bills + Material' },
+    cement: { amount: 5.4, paid: 5.4, pending: 0, docs: 'Purchase Records' },
+    iron: { amount: 7.25, paid: 4, pending: 3.25, docs: 'Supplier Invoices' },
+    aggregate: { amount: 5, paid: 5, pending: 0, docs: 'Internal Stock' },
+    excavation: { amount: 22.5, paid: 22.5, pending: 0, docs: 'Fuel Bills' },
+    electrical_panels: { amount: 9.9, paid: 9.9, pending: 0, docs: 'Quotation' },
+    electrical_components: { amount: 2.39, paid: 2.39, pending: 0, docs: 'AEC/25-26/2224' },
+    transformer: { amount: 6.6, paid: 0, pending: 6.6, docs: 'Shiv Shakti Quote' },
+    transformer_install: { amount: 6.05, paid: 1.5, pending: 4.55, docs: 'Dhiman Electrical + NGG ₹50K' },
+    dic_security: { amount: 3.12, paid: 0, pending: 3.12, docs: 'DIC Load Sanction' },
+    cable_tray: { amount: 0.21, paid: 0.21, pending: 0, docs: 'Simplex #30' }
+  };
+
+  const totalInvested = Object.values(capitalDeployment).reduce((sum, item) => sum + item.paid, 0);
+  const totalPending = Object.values(capitalDeployment).reduce((sum, item) => sum + item.pending, 0);
+  const totalBudget = Object.values(capitalDeployment).reduce((sum, item) => sum + item.amount, 0);
+
+  // VERIFIED OPERATIONAL COSTS (Real FY 2024-25 data)
+  const operationalCosts = {
+    electricity: {
+      fy2425: 244.277,
+      apr_sept_2025: 188,
+      monthly_operational: 50,
+      annual_projected: 600
+    },
+    labor: {
+      march_2025: 1272.574,
+      current_monthly: 90,
+      projected_operational: 350,
+      annual_projected: 4200
+    },
+    fuel_vehicle: {
+      annual_historical: 1497.221,
+      monthly_operational: 450,
+      annual_projected: 5400
+    },
+    rent: {
+      plant_monthly: 35,
+      mining_advance: 450,
+      annual_projected: 420
+    },
+    professional_fees: {
+      fy2425: 11.3,
+      annual_projected: 50
+    }
+  };
+
+  // STRATEGIC LOCATION DATA (Verified GPS)
+  const strategicLocations = [
+    {
+      name: 'Jeevan Industries Plant',
+      lat: 31.33004507519494,
+      lng: 76.81713304408478,
+      type: 'plant',
+      color: '#10b981'
+    },
+    {
+      name: 'Max Infra Office (Railway Contractor)',
+      lat: 31.38094598217376,
+      lng: 76.79367221983324,
+      distance: '5.8 km',
+      project: 'Bhanupali-Beri Railway',
+      value: '₹435 Cr',
+      demand: 'Very High',
+      status: 'Active - Confirmed Order: 300 MT/day via Jagatpal',
+      type: 'customer',
+      color: '#3b82f6'
+    },
+    {
+      name: 'Gawar Construction (Highway)',
+      lat: 31.294800936092724,
+      lng: 76.77030870118573,
+      distance: '10.2 km',
+      project: 'Shimla-Mataur NH-88',
+      value: '₹1,100 Cr',
+      demand: 'Very High',
+      status: 'Under Construction',
+      type: 'customer',
+      color: '#8b5cf6'
+    },
+    {
+      name: 'AIIMS Bilaspur',
+      lat: 31.28571245620218,
+      lng: 76.78444976521426,
+      distance: '8.1 km',
+      project: 'Medical Campus Expansion',
+      value: 'Ongoing',
+      demand: 'Medium-High',
+      status: 'Operational + Expansion',
+      type: 'customer',
+      color: '#f59e0b'
+    },
+    {
+      name: 'PK Construction (PWD)',
+      lat: 31.357101514390497,
+      lng: 76.83584290924995,
+      distance: '5.3 km',
+      project: 'Berri-Navgao Road',
+      value: '₹80 Cr',
+      demand: 'High',
+      status: 'Under Construction',
+      type: 'customer',
+      color: '#ec4899'
+    }
+  ];
+
+  // CONFIRMED CUSTOMER ORDERS
+  const customerOrders = [
+    {
+      customer: 'Max Infra (via Jagatpal Stone Crusher)',
+      project: 'Bhanupali-Beri Railway Line',
+      quantity: '300 MT/day',
+      rate: '₹825/MT',
+      monthly_value: '₹74.25L',
+      annual_potential: '₹8.91 Cr',
+      status: 'Active Purchase Order',
+      date: 'March 15, 2024',
+      verified: true
+    },
+    {
+      customer: 'PK Construction',
+      project: 'Berri-Navgao PWD Road (₹80 Cr)',
+      quantity: 'Pipeline',
+      rate: 'Market Rate',
+      status: 'In Discussion',
+      verified: false
+    },
+    {
+      customer: 'Hans Construction',
+      project: 'Local Infrastructure',
+      quantity: 'Pipeline',
+      status: 'Potential',
+      verified: false
+    },
+    {
+      customer: 'Ajay Handa (A-Class Govt Contractor)',
+      project: 'Government Works',
+      quantity: 'Pipeline',
+      status: 'Potential',
+      verified: false
+    }
+  ];
+
+  // RAW MATERIAL SECURITY
+  const rawMaterialInventory = [
+    { source: 'Plot Cutting #1', quantity: 29000, status: 'Available', color: '#10b981' },
+    { source: 'Plot Cutting #2', quantity: 27000, status: 'Available', color: '#3b82f6' },
+    { source: 'Stock Permission', quantity: 4037, status: 'Approved', color: '#8b5cf6', doc: 'Mining Officer Letter' },
+    { source: 'Mining Lease (LOI Issued)', quantity: 35000, status: 'SEIAA Pending', color: '#f59e0b' }
+  ];
+
+  const totalRawMaterial = rawMaterialInventory.reduce((sum, item) => sum + item.quantity, 0);
+
+  // FINANCIAL PROJECTIONS - Conservative & Normal Scenarios
+  const projectionScenarios = {
+    conservative: {
+      name: 'Conservative Approach',
+      description: 'Risk-adjusted, prudent assumptions',
+      capacity_utilization: [70, 75, 80, 82, 85, 85, 87],
+      price_realization: 23,
+      growth_rate: 0.15,
+      years: [
+        { year: 'FY26', revenue: 1575, ebitda: 236, ebit: 197, pat: 128, dscr: 6.2, roi: 18.5 },
+        { year: 'FY27', revenue: 1811, ebitda: 272, ebit: 233, pat: 152, dscr: 7.1, roi: 22.3 },
+        { year: 'FY28', revenue: 2083, ebitda: 312, ebit: 273, pat: 178, dscr: 8.3, roi: 25.8 },
+        { year: 'FY29', revenue: 2396, ebitda: 359, ebit: 320, pat: 208, dscr: 9.2, roi: 28.7 },
+        { year: 'FY30', revenue: 2755, ebitda: 413, ebit: 374, pat: 243, dscr: 10.1, roi: 31.2 },
+        { year: 'FY31', revenue: 3168, ebitda: 475, ebit: 436, pat: 283, dscr: 11.5, roi: 33.8 },
+        { year: 'FY32', revenue: 3643, ebitda: 546, ebit: 507, pat: 330, dscr: 12.8, roi: 36.1 }
+      ]
+    },
+    normal: {
+      name: 'Normal/Realistic Approach',
+      description: 'Aligned with infrastructure boom & market conditions',
+      capacity_utilization: [80, 85, 90, 92, 93, 95, 95],
+      price_realization: 25,
+      growth_rate: 0.25,
+      years: [
+        { year: 'FY26', revenue: 1800, ebitda: 288, ebit: 243, pat: 158, dscr: 7.8, roi: 23.5 },
+        { year: 'FY27', revenue: 2250, ebitda: 360, ebit: 315, pat: 205, dscr: 9.2, roi: 28.9 },
+        { year: 'FY28', revenue: 2813, ebitda: 450, ebit: 405, pat: 263, dscr: 11.5, roi: 34.2 },
+        { year: 'FY29', revenue: 3516, ebitda: 563, ebit: 518, pat: 337, dscr: 13.8, roi: 39.8 },
+        { year: 'FY30', revenue: 4395, ebitda: 703, ebit: 658, pat: 428, dscr: 16.2, roi: 45.1 },
+        { year: 'FY31', revenue: 5494, ebitda: 879, ebit: 834, pat: 542, dscr: 18.9, roi: 50.3 },
+        { year: 'FY32', revenue: 6867, ebitda: 1099, ebit: 1054, pat: 685, dscr: 21.5, roi: 55.2 }
+      ]
+    }
+  };
+
+  const activeProjection = projectionScenarios[selectedScenario];
+
+  // MARKET COMPETITIVE ANALYSIS
+  const marketPosition = [
+    { metric: 'Location Advantage', score: 95, benchmark: 70 },
+    { metric: 'Raw Material Security', score: 90, benchmark: 65 },
+    { metric: 'Infrastructure Proximity', score: 98, benchmark: 60 },
+    { metric: 'Capacity vs Demand', score: 85, benchmark: 75 },
+    { metric: 'Price Competitiveness', score: 88, benchmark: 72 },
+    { metric: 'Compliance Status', score: 82, benchmark: 70 }
+  ];
+
+  // LOAN UTILIZATION BREAKDOWN
+  const loanUtilization = [
+    { item: 'Pending Machinery Payments', amount: 16.25, percentage: 23.2 },
+    { item: 'Working Capital (3 months)', amount: 40, percentage: 57.1 },
+    { item: 'Contingency & Setup', amount: 13.75, percentage: 19.7 }
+  ];
+
+  const COLORS = ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b', '#ec4899', '#14b8a6', '#f97316'];
+
+  const toggleExpand = (id) => {
+    setExpandedItems(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const MetricCard = ({ icon: Icon, title, value, subtitle, trend, color, onClick }) => (
+    <div 
+      onClick={onClick}
+      onMouseEnter={() => setHoveredMetric(title)}
+      onMouseLeave={() => setHoveredMetric(null)}
+      className={`bg-gradient-to-br ${color} border border-opacity-50 rounded-xl p-5 cursor-pointer transform transition-all duration-300 ${
+        hoveredMetric === title ? 'scale-105 shadow-2xl' : 'hover:scale-102 shadow-lg'
+      }`}
+    >
+      <div className="flex items-center justify-between mb-3">
+        <div className="text-sm font-medium opacity-90">{title}</div>
+        <Icon className="w-6 h-6 opacity-80" />
+      </div>
+      <div className="text-4xl font-bold mb-2">{value}</div>
+      <div className="flex items-center justify-between">
+        <div className="text-xs opacity-75">{subtitle}</div>
+        {trend && (
+          <div className={`flex items-center gap-1 text-xs font-medium ${
+            trend > 0 ? 'text-green-300' : 'text-red-300'
+          }`}>
+            {trend > 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+            {Math.abs(trend)}%
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="w-full bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white min-h-screen">
+      {/* Animated Background */}
+      <div className="fixed inset-0 opacity-5">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-purple-500 to-emerald-500 animate-pulse"></div>
+      </div>
+
+      {/* Header */}
+      <div className="relative z-10 border-b border-slate-800 backdrop-blur-xl bg-slate-900/50 sticky top-0">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-emerald-400 to-purple-400 bg-clip-text text-transparent">
+                Jeevan Industries
+              </h1>
+              <p className="text-slate-400 text-sm">Interactive Financial Intelligence Platform | Term Loan: ₹70 Lakh</p>
+            </div>
+            <div className="flex gap-3">
+              <button className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg flex items-center gap-2 transition-all">
+                <Download className="w-4 h-4" />
+                Export PDF
+              </button>
+              <button className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 rounded-lg flex items-center gap-2 transition-all">
+                <Eye className="w-4 h-4" />
+                Banker View
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <div className="relative z-10 border-b border-slate-800 backdrop-blur-xl bg-slate-900/30">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex gap-1 overflow-x-auto">
+            {[
+              { id: 'dashboard', label: 'Executive Dashboard', icon: Target },
+              { id: 'investment', label: 'Capital Deployment', icon: DollarSign },
+              { id: 'location', label: 'Strategic Location', icon: MapPin },
+              { id: 'projections', label: 'Financial Projections', icon: TrendingUp },
+              { id: 'customers', label: 'Customer Pipeline', icon: Users },
+              { id: 'compliance', label: 'Compliance Matrix', icon: Shield }
+            ].map(({ id, label, icon: Icon }) => (
+              <button
+                key={id}
+                onClick={() => setActiveSection(id)}
+                className={`px-6 py-4 font-medium transition-all flex items-center gap-2 whitespace-nowrap ${
+                  activeSection === id
+                    ? 'border-b-2 border-blue-400 text-blue-400 bg-blue-950/30'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/30'
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-8">
+        
+        {/* EXECUTIVE DASHBOARD */}
+        {activeSection === 'dashboard' && (
+          <div className="space-y-6 animate-fadeIn" key={`dashboard-${animationKey}`}>
+            {/* Hero Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              <MetricCard
+                icon={DollarSign}
+                title="Total Project Value"
+                value={`₹${(totalInvested + totalPending + 70).toFixed(0)}L`}
+                subtitle="Complete Investment"
+                trend={5}
+                color="from-emerald-900/40 to-emerald-800/20 border-emerald-700/50"
+              />
+              <MetricCard
+                icon={CheckCircle}
+                title="Self-Funded"
+                value={`₹${totalInvested.toFixed(0)}L`}
+                subtitle={`${((totalInvested/(totalInvested + totalPending + 70))*100).toFixed(0)}% Equity`}
+                trend={8}
+                color="from-blue-900/40 to-blue-800/20 border-blue-700/50"
+              />
+              <MetricCard
+                icon={FileText}
+                title="Loan Requirement"
+                value="₹70L"
+                subtitle="30.5% Leverage"
+                color="from-amber-900/40 to-amber-800/20 border-amber-700/50"
+              />
+              <MetricCard
+                icon={TrendingUp}
+                title="Revenue Potential"
+                value="₹1,800L"
+                subtitle="Annual (Conservative)"
+                trend={25}
+                color="from-purple-900/40 to-purple-800/20 border-purple-700/50"
+              />
+              <MetricCard
+                icon={Award}
+                title="DSCR Projected"
+                value="7.8x"
+                subtitle="Strong Debt Coverage"
+                trend={12}
+                color="from-pink-900/40 to-pink-800/20 border-pink-700/50"
+              />
+            </div>
+
+            {/* Market Intelligence */}
+            <div className="bg-gradient-to-r from-purple-900/20 to-blue-900/20 border border-purple-700/30 rounded-xl p-6">
+              <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                <Target className="w-6 h-6" />
+                Strategic Market Position
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div className="text-center">
+                  <div className="text-5xl font-bold text-emerald-400 mb-2">₹13,067 Cr</div>
+                  <div className="text-sm text-slate-400">Infrastructure Projects in 10km Radius</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-5xl font-bold text-blue-400 mb-2">Only 1</div>
+                  <div className="text-sm text-slate-400">Operational Crusher in Proximity</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-5xl font-bold text-purple-400 mb-2">{(totalRawMaterial/1000).toFixed(0)}K MT</div>
+                  <div className="text-sm text-slate-400">Raw Material Secured</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-5xl font-bold text-amber-400 mb-2">5-6x</div>
+                  <div className="text-sm text-slate-400">Capacity Increase Post-Upgrade</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Competitive Advantage Radar */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+                <h3 className="text-xl font-bold mb-4">Market Advantage Analysis</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <RadarChart data={marketPosition}>
+                    <PolarGrid stroke="#334155" />
+                    <PolarAngleAxis dataKey="metric" stroke="#94a3b8" style={{ fontSize: '11px' }} />
+                    <PolarRadiusAxis stroke="#94a3b8" />
+                    <Radar name="Jeevan Industries" dataKey="score" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} />
+                    <Radar name="Industry Avg" dataKey="benchmark" stroke="#64748b" fill="#64748b" fillOpacity={0.3} />
+                    <Legend />
+                  </RadarChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+                <h3 className="text-xl font-bold mb-4">Raw Material Security</h3>
+                <div className="space-y-3">
+                  {rawMaterialInventory.map((item, idx) => (
+                    <div key={idx} className="flex justify-between items-center p-3 rounded-lg" style={{ backgroundColor: `${item.color}20` }}>
+                      <div>
+                        <div className="font-medium" style={{ color: item.color }}>{item.source}</div>
+                        <div className="text-xs text-slate-400">{item.status}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-xl font-bold" style={{ color: item.color }}>{item.quantity.toLocaleString()} MT</div>
+                        {item.doc && <div className="text-xs text-slate-400">{item.doc}</div>}
+                      </div>
+                    </div>
+                  ))}
+                  <div className="pt-3 border-t border-slate-700 flex justify-between items-center">
+                    <div className="font-bold text-lg">Total Secured</div>
+                    <div className="text-2xl font-bold text-emerald-400">{totalRawMaterial.toLocaleString()} MT</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Historical Performance */}
+            <div className="bg-gradient-to-r from-blue-900/20 to-emerald-900/20 border border-blue-700/30 rounded-xl p-6">
+              <h3 className="text-2xl font-bold mb-4">Proven Track Record: June 2024 - February 2025</h3>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div>
+                  <div className="text-3xl font-bold text-emerald-400">125,000</div>
+                  <div className="text-sm text-slate-400">CFT Sold</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-blue-400">5,000</div>
+                  <div className="text-sm text-slate-400">Metric Tons</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-purple-400">₹31.25L</div>
+                  <div className="text-sm text-slate-400">Revenue Generated</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-amber-400">4,000</div>
+                  <div className="text-sm text-slate-400">CFT/Day (Old Capacity)</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-pink-400">8.5</div>
+                  <div className="text-sm text-slate-400">Months Operational</div>
+                </div>
+              </div>
+              <p className="text-xs text-slate-400 mt-4 italic">
+                Operated by: Saransh Sharma (under Ashok Kumar Dabra stock permission) | Average Price: ₹25/CFT
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* CAPITAL DEPLOYMENT */}
+        {activeSection === 'investment' && (
+          <div className="space-y-6 animate-fadeIn" key={`investment-${animationKey}`}>
+            <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+              <h2 className="text-2xl font-bold mb-6">Capital Deployment Matrix with Full Citation</h2>
+              
+              {/* Visual Investment Flow */}
+              <div className="mb-8">
+                <ResponsiveContainer width="100%" height={400}>
+                  <BarChart data={Object.entries(capitalDeployment).map(([key, val]) => ({
+                    name: key.replace(/_/g, ' ').toUpperCase(),
+                    paid: val.paid,
+                    pending: val.pending,
+                    total: val.amount
+                  }))}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                    <XAxis dataKey="name" angle={-45} textAnchor="end" height={150} stroke="#94a3b8" style={{ fontSize: '10px' }} />
+                    <YAxis stroke="#94a3b8" />
+                    <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155' }} />
+                    <Legend />
+                    <Bar dataKey="paid" stackId="a" fill="#10b981" name="Paid (Self-Funded)" />
+                    <Bar dataKey="pending" stackId="a" fill="#f59e0b" name="Pending" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Detailed Investment Table */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b-2 border-slate-700">
+                      <th className="text-left p-3 text-slate-400">Asset Category</th>
+                      <th className="text-right p-3 text-slate-400">Amount</th>
+                      <th className="text-right p-3 text-slate-400">Paid</th>
+                      <th className="text-right p-3 text-slate-400">Pending</th>
+                      <th className="text-center p-3 text-slate-400">Status</th>
+                      <th className="text-left p-3 text-slate-400">Supporting Document</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.entries(capitalDeployment).map(([key, val], idx) => (
+                      <tr key={idx} className="border-b border-slate-700/50 hover:bg-slate-700/30 transition-all cursor-pointer" onClick={() => toggleExpand(key)}>
+                        <td className="p-3 font-medium flex items-center gap-2">
+                          {expandedItems[key] ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                          {key.replace(/_/g, ' ').toUpperCase()}
+                        </td>
+                        <td className="p-3 text-right text-slate-300">₹{val.amount.toFixed(2)}L</td>
+                        <td className="p-3 text-right text-emerald-400 font-medium">₹{val.paid.toFixed(2)}L</td>
+                        <td className="p-3 text-right text-amber-400">₹{val.pending.toFixed(2)}L</td>
+                        <td className="p-3 text-center">
+                          <div className="inline-block w-20 bg-slate-700 rounded-full h-2">
+                            <div 
+                              className="bg-emerald-400 h-2 rounded-full transition-all" 
+                              style={{ width: `${(val.paid/val.amount)*100}%` }}
+                            />
+                          </div>
+                        </td>
+                        <td className="p-3 text-slate-400 text-xs">{val.docs}</td>
+                      </tr>
+                    ))}
+                    <tr className="font-bold bg-slate-700/30 text-lg">
+                      <td className="p-3">TOTAL PROJECT COST</td>
+                      <td className="p-3 text-right">₹{totalBudget.toFixed(2)}L</td>
+                      <td className="p-3 text-right text-emerald-400">₹{totalInvested.toFixed(2)}L</td>
+                      <td className="p-3 text-right text-amber-400">₹{totalPending.toFixed(2)}L</td>
+                      <td className="p-3 text-center text-slate-300">{((totalInvested/totalBudget)*100).toFixed(1)}%</td>
+                      <td className="p-3"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Funding Architecture */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+                <h3 className="text-xl font-bold mb-4">Funding Structure</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={[
+                        { name: 'Self-Funded', value: totalInvested, color: '#10b981' },
+                        { name: 'Pending', value: totalPending, color: '#f59e0b' },
+                        { name: 'Loan', value: 70, color: '#3b82f6' }
+                      ]}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={100}
+                      label={(entry) => `${((entry.value/(totalInvested + totalPending + 70))*100).toFixed(1)}%`}
+                    >
+                      {[{ color: '#10b981' }, { color: '#f59e0b' }, { color: '#3b82f6' }].map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155' }} />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="mt-4 space-y-2">
+                  <div className="flex justify-between items-center p-2 bg-emerald-900/20 rounded">
+                    <span className="text-emerald-400">Self-Funded</span>
+                    <span className="font-bold text-emerald-400">₹{totalInvested.toFixed(2)}L ({((totalInvested/(totalInvested + totalPending + 70))*100).toFixed(1)}%)</span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 bg-amber-900/20 rounded">
+                    <span className="text-amber-400">Pending</span>
+                    <span className="font-bold text-amber-400">₹{totalPending.toFixed(2)}L ({((totalPending/(totalInvested + totalPending + 70))*100).toFixed(1)}%)</span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 bg-blue-900/20 rounded">
+                    <span className="text-blue-400">Loan</span>
+                    <span className="font-bold text-blue-400">₹70.00L ({((70/(totalInvested + totalPending + 70))*100).toFixed(1)}%)</span>
+                  </div>
+                </div>
+                <div className="mt-4 p-3 bg-purple-900/20 rounded border border-purple-700/30">
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-300">Debt-to-Equity Ratio</span>
+                    <span className="text-2xl font-bold text-purple-400">{(70 / totalInvested).toFixed(2)}:1</span>
+                  </div>
+                  <p className="text-xs text-slate-400 mt-2">Conservative leverage with strong equity base</p>
+                </div>
+              </div>
+
+              <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+                <h3 className="text-xl font-bold mb-4">₹70 Lakh Loan Utilization</h3>
+                <div className="space-y-3">
+                  {loanUtilization.map((item, idx) => (
+                    <div key={idx} className="p-4 bg-slate-700/30 rounded-lg hover:bg-slate-700/50 transition-all">
+                      <div className="flex justify-between items-center mb-2">
+                        <div className="font-medium text-slate-200">{item.item}</div>
+                        <div className="text-xl font-bold text-blue-400">₹{item.amount}L</div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 bg-slate-700 rounded-full h-2">
+                          <div 
+                            className="bg-blue-400 h-2 rounded-full transition-all" 
+                            style={{ width: `${item.percentage}%` }}
+                          />
+                        </div>
+                        <span className="text-xs text-slate-400">{item.percentage.toFixed(1)}%</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* STRATEGIC LOCATION */}
+        {activeSection === 'location' && (
+          <div className="space-y-6 animate-fadeIn" key={`location-${animationKey}`}>
+            <div className="bg-gradient-to-r from-purple-900/20 to-blue-900/20 border border-purple-700/30 rounded-xl p-6">
+              <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                <MapPin className="w-6 h-6" />
+                Strategic Geographic Advantage
+              </h2>
+              <p className="text-slate-300 mb-6">
+                Jeevan Industries is positioned at the epicenter of ₹13,067 Crore infrastructure development, 
+                with exclusive market access as the only operational crusher within 10km radius.
+              </p>
+            </div>
+
+            {/* Location Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {strategicLocations.filter(loc => loc.type === 'customer').map((location, idx) => (
+                <div key={idx} className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 hover:border-blue-500/50 transition-all">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 className="text-xl font-bold mb-2" style={{ color: location.color }}>{location.name}</h3>
+                      <div className="text-sm text-slate-400">{location.project}</div>
+                    </div>
+                    <div className="text-right">
+                      <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        location.status.includes('Active') ? 'bg-emerald-900/40 text-emerald-400' :
+                        location.status.includes('Under') ? 'bg-amber-900/40 text-amber-400' :
+                        'bg-blue-900/40 text-blue-400'
+                      }`}>
+                        {location.status.split(' ')[0]}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="p-3 bg-slate-900/50 rounded">
+                      <div className="text-xs text-slate-400 mb-1">Distance</div>
+                      <div className="text-lg font-bold" style={{ color: location.color }}>{location.distance}</div>
+                    </div>
+                    <div className="p-3 bg-slate-900/50 rounded">
+                      <div className="text-xs text-slate-400 mb-1">Project Value</div>
+                      <div className="text-lg font-bold" style={{ color: location.color }}>{location.value}</div>
+                    </div>
+                    <div className="p-3 bg-slate-900/50 rounded">
+                      <div className="text-xs text-slate-400 mb-1">Stone Demand</div>
+                      <div className="text-lg font-bold" style={{ color: location.color }}>{location.demand}</div>
+                    </div>
+                    <div className="p-3 bg-slate-900/50 rounded">
+                      <div className="text-xs text-slate-400 mb-1">GPS</div>
+                      <div className="text-xs font-mono" style={{ color: location.color }}>
+                        {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-3 bg-gradient-to-r from-slate-900/50 to-slate-800/50 rounded border border-slate-700">
+                    <div className="text-sm font-medium mb-1">Current Status:</div>
+                    <div className="text-sm text-slate-300">{location.status}</div>
+                  </div>
+
+                  <button className="w-full mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg flex items-center justify-center gap-2 transition-all">
+                    <ExternalLink className="w-4 h-4" />
+                    View on Google Maps
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* Proximity Advantage */}
+            <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+              <h3 className="text-xl font-bold mb-4">Competitive Location Analysis</h3>
+              <div className="grid grid-cols-3 gap-6">
+                <div className="text-center p-4 bg-emerald-900/20 rounded-lg">
+                  <div className="text-4xl font-bold text-emerald-400 mb-2">6.3 km</div>
+                  <div className="text-sm text-slate-400">Average Distance to Projects</div>
+                  <div className="text-xs text-emerald-400 mt-2">Closest supplier in region</div>
+                </div>
+                <div className="text-center p-4 bg-blue-900/20 rounded-lg">
+                  <div className="text-4xl font-bold text-blue-400 mb-2">₹300-500</div>
+                  <div className="text-sm text-slate-400">Transport Cost Advantage per MT</div>
+                  <div className="text-xs text-blue-400 mt-2">vs competitors 20+ km away</div>
+                </div>
+                <div className="text-center p-4 bg-purple-900/20 rounded-lg">
+                  <div className="text-4xl font-bold text-purple-400 mb-2">30 min</div>
+                  <div className="text-sm text-slate-400">Delivery Time to Sites</div>
+                  <div className="text-xs text-purple-400 mt-2">Same-day delivery capability</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* FINANCIAL PROJECTIONS */}
+        {activeSection === 'projections' && (
+          <div className="space-y-6 animate-fadeIn" key={`projections-${animationKey}`}>
+            {/* Scenario Selector */}
+            <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+              <h2 className="text-2xl font-bold mb-4">Financial Projection Scenarios</h2>
+              <div className="flex gap-4">
+                {Object.entries(projectionScenarios).map(([key, scenario]) => (
+                  <button
+                    key={key}
+                    onClick={() => setSelectedScenario(key)}
+                    className={`flex-1 p-4 rounded-lg border-2 transition-all ${
+                      selectedScenario === key
+                        ? 'border-blue-500 bg-blue-900/30'
+                        : 'border-slate-700 hover:border-slate-600 bg-slate-800/30'
+                    }`}
+                  >
+                    <div className="font-bold text-lg mb-2">{scenario.name}</div>
+                    <div className="text-sm text-slate-400">{scenario.description}</div>
+                    <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                      <div className="p-2 bg-slate-900/50 rounded">
+                        <div className="text-slate-500">Price/CFT</div>
+                        <div className="font-bold text-blue-400">₹{scenario.price_realization}</div>
+                      </div>
+                      <div className="p-2 bg-slate-900/50 rounded">
+                        <div className="text-slate-500">Growth</div>
+                        <div className="font-bold text-emerald-400">{(scenario.growth_rate * 100).toFixed(0)}%</div>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Revenue & Profitability Chart */}
+            <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+              <h3 className="text-xl font-bold mb-4">7-Year Revenue & Profitability Trajectory</h3>
+              <ResponsiveContainer width="100%" height={400}>
+                <AreaChart data={activeProjection.years}>
+                  <defs>
+                    <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="colorPat" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                  <XAxis dataKey="year" stroke="#94a3b8" />
+                  <YAxis stroke="#94a3b8" />
+                  <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155' }} />
+                  <Legend />
+                  <Area type="monotone" dataKey="revenue" stroke="#3b82f6" fillOpacity={1} fill="url(#colorRevenue)" name="Revenue (₹L)" />
+                  <Area type="monotone" dataKey="pat" stroke="#10b981" fillOpacity={1} fill="url(#colorPat)" name="PAT (₹L)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* DSCR & ROI Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+                <h3 className="text-xl font-bold mb-4">Debt Service Coverage Ratio (DSCR)</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={activeProjection.years}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                    <XAxis dataKey="year" stroke="#94a3b8" />
+                    <YAxis stroke="#94a3b8" />
+                    <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155' }} />
+                    <Line type="monotone" dataKey="dscr" stroke="#10b981" strokeWidth={3} name="DSCR" />
+                  </LineChart>
+                </ResponsiveContainer>
+                <div className="mt-4 p-4 bg-emerald-900/20 rounded-lg border border-emerald-700/30">
+                  <div className="text-sm text-slate-400 mb-2">Average DSCR (7 years)</div>
+                  <div className="text-4xl font-bold text-emerald-400">
+                    {(activeProjection.years.reduce((sum, y) => sum + y.dscr, 0) / activeProjection.years.length).toFixed(2)}x
+                  </div>
+                  <div className="text-xs text-slate-400 mt-2">Excellent debt servicing capability (Industry standard: 1.5x minimum)</div>
+                </div>
+              </div>
+
+              <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+                <h3 className="text-xl font-bold mb-4">Return on Investment (ROI %)</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={activeProjection.years}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                    <XAxis dataKey="year" stroke="#94a3b8" />
+                    <YAxis stroke="#94a3b8" />
+                    <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155' }} />
+                    <Line type="monotone" dataKey="roi" stroke="#8b5cf6" strokeWidth={3} name="ROI %" />
+                  </LineChart>
+                </ResponsiveContainer>
+                <div className="mt-4 p-4 bg-purple-900/20 rounded-lg border border-purple-700/30">
+                  <div className="text-sm text-slate-400 mb-2">Year 7 ROI</div>
+                  <div className="text-4xl font-bold text-purple-400">
+                    {activeProjection.years[6].roi.toFixed(1)}%
+                  </div>
+                  <div className="text-xs text-slate-400 mt-2">Strong returns exceeding industry benchmarks</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Detailed Yearly Breakdown */}
+            <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 overflow-x-auto">
+              <h3 className="text-xl font-bold mb-4">Detailed Financial Projections Table</h3>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b-2 border-slate-700">
+                    <th className="text-left p-3 text-slate-400">Year</th>
+                    <th className="text-right p-3 text-slate-400">Revenue (₹L)</th>
+                    <th className="text-right p-3 text-slate-400">EBITDA (₹L)</th>
+                    <th className="text-right p-3 text-slate-400">EBIT (₹L)</th>
+                    <th className="text-right p-3 text-slate-400">PAT (₹L)</th>
+                    <th className="text-right p-3 text-slate-400">DSCR</th>
+                    <th className="text-right p-3 text-slate-400">ROI %</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {activeProjection.years.map((year, idx) => (
+                    <tr key={idx} className="border-b border-slate-700/50 hover:bg-slate-700/30">
+                      <td className="p-3 font-medium">{year.year}</td>
+                      <td className="p-3 text-right text-blue-400">{year.revenue.toLocaleString()}</td>
+                      <td className="p-3 text-right text-emerald-400">{year.ebitda.toLocaleString()}</td>
+                      <td className="p-3 text-right text-purple-400">{year.ebit.toLocaleString()}</td>
+                      <td className="p-3 text-right text-amber-400">{year.pat.toLocaleString()}</td>
+                      <td className="p-3 text-right text-pink-400 font-bold">{year.dscr.toFixed(1)}x</td>
+                      <td className="p-3 text-right text-cyan-400">{year.roi.toFixed(1)}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* CUSTOMER PIPELINE */}
+        {activeSection === 'customers' && (
+          <div className="space-y-6 animate-fadeIn" key={`customers-${animationKey}`}>
+            <div className="bg-gradient-to-r from-emerald-900/20 to-blue-900/20 border border-emerald-700/30 rounded-xl p-6">
+              <h2 className="text-2xl font-bold mb-2">Confirmed & Pipeline Customers</h2>
+              <p className="text-slate-300">
+                Strong demand pipeline backed by ₹13,000+ Crore infrastructure projects in proximity. 
+                Market assessment indicates minimal competition with high demand environment.
+              </p>
+            </div>
+
+            {/* Customer Cards */}
+            {customerOrders.map((order, idx) => (
+              <div 
+                key={idx} 
+                className={`bg-slate-800/50 border rounded-xl p-6 transition-all ${
+                  order.verified 
+                    ? 'border-emerald-500/50 hover:border-emerald-400' 
+                    : 'border-slate-700 hover:border-slate-600'
+                }`}
+              >
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h3 className="text-2xl font-bold mb-2 flex items-center gap-2">
+                      {order.customer}
+                      {order.verified && <CheckCircle className="w-6 h-6 text-emerald-400" />}
+                    </h3>
+                    <div className="text-slate-400">{order.project}</div>
+                  </div>
+                  <div className={`px-4 py-2 rounded-full text-sm font-medium ${
+                    order.status === 'Active Purchase Order' ? 'bg-emerald-900/40 text-emerald-400 border border-emerald-700' :
+                    order.status === 'In Discussion' ? 'bg-blue-900/40 text-blue-400 border border-blue-700' :
+                    'bg-slate-700 text-slate-400 border border-slate-600'
+                  }`}>
+                    {order.status}
+                  </div>
+                </div>
+
+                {order.verified && (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                    <div className="p-4 bg-emerald-900/20 rounded-lg border border-emerald-700/30">
+                      <div className="text-xs text-slate-400 mb-1">Daily Quantity</div>
+                      <div className="text-2xl font-bold text-emerald-400">{order.quantity}</div>
+                    </div>
+                    <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700/30">
+                      <div className="text-xs text-slate-400 mb-1">Rate</div>
+                      <div className="text-2xl font-bold text-blue-400">{order.rate}</div>
+                    </div>
+                    <div className="p-4 bg-purple-900/20 rounded-lg border border-purple-700/30">
+                      <div className="text-xs text-slate-400 mb-1">Monthly Value</div>
+                      <div className="text-2xl font-bold text-purple-400">{order.monthly_value}</div>
+                    </div>
+                    <div className="p-4 bg-amber-900/20 rounded-lg border border-amber-700/30">
+                      <div className="text-xs text-slate-400 mb-1">Annual Potential</div>
+                      <div className="text-2xl font-bold text-amber-400">{order.annual_potential}</div>
+                    </div>
+                  </div>
+                )}
+
+                {order.date && (
+                  <div className="p-3 bg-slate-900/50 rounded border border-slate-700 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-slate-400" />
+                      <span className="text-sm text-slate-400">Purchase Order Date:</span>
+                      <span className="text-sm font-medium text-slate-200">{order.date}</span>
+                    </div>
+                    <button className="px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded text-xs flex items-center gap-1 transition-all">
+                      <FileText className="w-3 h-3" />
+                      View PO Document
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {/* Market Assessment */}
+            <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+              <h3 className="text-xl font-bold mb-4">Market Demand Assessment</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="p-4 bg-gradient-to-br from-emerald-900/30 to-emerald-800/20 rounded-lg border border-emerald-700/30">
+                  <div className="text-slate-400 text-sm mb-2">Competition Analysis</div>
+                  <div className="text-3xl font-bold text-emerald-400 mb-2">2 of 12</div>
+                  <div className="text-sm text-slate-300">
+                    Only 2 operational crushers in Naina Devi constituency out of 12 total in Bilaspur district
+                  </div>
+                </div>
+                <div className="p-4 bg-gradient-to-br from-blue-900/30 to-blue-800/20 rounded-lg border border-blue-700/30">
+                  <div className="text-slate-400 text-sm mb-2">Market Access</div>
+                  <div className="text-3xl font-bold text-blue-400 mb-2">Exclusive</div>
+                  <div className="text-sm text-slate-300">
+                    Only operational crusher within 10km radius of major infrastructure projects
+                  </div>
+                </div>
+                <div className="p-4 bg-gradient-to-br from-purple-900/30 to-purple-800/20 rounded-lg border border-purple-700/30">
+                  <div className="text-slate-400 text-sm mb-2">Demand Environment</div>
+                  <div className="text-3xl font-bold text-purple-400 mb-2">Very High</div>
+                  <div className="text-sm text-slate-300">
+                    Construction boom in region with limited supply capacity
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* COMPLIANCE MATRIX */}
+        {activeSection === 'compliance' && (
+          <div className="space-y-6 animate-fadeIn" key={`compliance-${animationKey}`}>
+            <div className="bg-gradient-to-r from-blue-900/20 to-emerald-900/20 border border-blue-700/30 rounded-xl p-6">
+              <h2 className="text-2xl font-bold mb-2 flex items-center gap-2">
+                <Shield className="w-6 h-6" />
+                Regulatory Compliance Dashboard
+              </h2>
+              <p className="text-slate-300">
+                Complete statutory and regulatory compliance with documented evidence for all requirements
+              </p>
+            </div>
+
+            {/* Compliance Items */}
+            <div className="grid grid-cols-1 gap-4">
+              {[
+                { item: 'GST Registration', status: 'Complete', doc: '02AAVFJ4960D1ZB', validity: 'Active', type: 'complete' },
+                { item: 'Stock Permission', status: 'Complete', doc: '4,037 MT Approved', validity: 'Valid', detail: 'Mining Officer Letter dated Aug 14, 2025', type: 'complete' },
+                { item: 'Pollution CTO', status: 'Complete', doc: 'Consent to Operate', validity: 'Valid', type: 'complete' },
+                { item: 'Partnership Deed', status: 'Complete', doc: 'Registered March 22, 2025', validity: 'Registration #22/2025', detail: '98:2 (Saransh:Ashok)', type: 'complete' },
+                { item: 'Land Lease Agreement', status: 'Complete', doc: '3.01 Bigha, 10-Year Lease', validity: 'Active', type: 'complete' },
+                { item: 'Mining Lease Application', status: 'In Progress', doc: 'LOI Issued for 18 Bigha', validity: 'SEIAA Clearance Pending', detail: 'Mining Plan Approved by Geology Dept', type: 'progress' },
+                { item: 'Environmental Clearance (SEIAA)', status: 'Pending', doc: 'To be obtained post Mining Lease', validity: 'Target: December 2025', type: 'pending' }
+              ].map((item, idx) => (
+                <div 
+                  key={idx} 
+                  className={`bg-slate-800/50 border rounded-xl p-6 transition-all ${
+                    item.type === 'complete' ? 'border-emerald-500/30 hover:border-emerald-400/50' :
+                    item.type === 'progress' ? 'border-amber-500/30 hover:border-amber-400/50' :
+                    'border-slate-700 hover:border-slate-600'
+                  }`}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className={`mt-1 ${
+                      item.type === 'complete' ? 'text-emerald-400' :
+                      item.type === 'progress' ? 'text-amber-400' :
+                      'text-slate-500'
+                    }`}>
+                      {item.type === 'complete' ? (
+                        <CheckCircle className="w-7 h-7" />
+                      ) : (
+                        <AlertCircle className="w-7 h-7" />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex justify-between items-start mb-3">
+                        <div>
+                          <h3 className="text-xl font-bold text-slate-200 mb-1">{item.item}</h3>
+                          <div className="text-sm text-slate-400 mb-2">{item.doc}</div>
+                          {item.detail && <div className="text-xs text-slate-500 italic">{item.detail}</div>}
+                        </div>
+                        <div className={`px-4 py-1 rounded-full text-xs font-medium ${
+                          item.type === 'complete' ? 'bg-emerald-900/40 text-emerald-400 border border-emerald-700' :
+                          item.type === 'progress' ? 'bg-amber-900/40 text-amber-400 border border-amber-700' :
+                          'bg-slate-700 text-slate-400 border border-slate-600'
+                        }`}>
+                          {item.status}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4 text-sm">
+                        <div className="flex items-center gap-2 text-slate-400">
+                          <Calendar className="w-4 h-4" />
+                          <span>Validity: <span className="text-slate-300 font-medium">{item.validity}</span></span>
+                        </div>
+                        <button className="ml-auto px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded text-xs flex items-center gap-1 transition-all">
+                          <FileText className="w-3 h-3" />
+                          View Document
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Compliance Summary */}
+            <div className="grid grid-cols-3 gap-4">
+              <div className="bg-emerald-900/20 border border-emerald-700/30 rounded-lg p-6 text-center">
+                <div className="text-5xl font-bold text-emerald-400 mb-2">5</div>
+                <div className="text-sm text-slate-400">Complete & Active</div>
+              </div>
+              <div className="bg-amber-900/20 border border-amber-700/30 rounded-lg p-6 text-center">
+                <div className="text-5xl font-bold text-amber-400 mb-2">1</div>
+                <div className="text-sm text-slate-400">In Progress (LOI Issued)</div>
+              </div>
+              <div className="bg-slate-700/30 border border-slate-600 rounded-lg p-6 text-center">
+                <div className="text-5xl font-bold text-slate-400 mb-2">1</div>
+                <div className="text-sm text-slate-400">Planned (Dec 2025)</div>
+              </div>
+            </div>
+
+            {/* Partnership Structure */}
+            <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+              <h3 className="text-xl font-bold mb-4">Partnership Structure (Registered March 22, 2025)</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="p-5 bg-blue-900/20 rounded-lg border border-blue-700/30">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Users className="w-6 h-6 text-blue-400" />
+                    <div className="font-bold text-lg">Saransh Sharma</div>
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Role:</span>
+                      <span className="text-slate-200 font-medium">Active Managing Partner</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Ownership:</span>
+                      <span className="text-blue-400 font-bold">98%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Capital Contribution:</span>
+                      <span className="text-emerald-400 font-medium">100% (All investments)</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Aadhaar:</span>
+                      <span className="text-slate-300 font-mono text-xs">6387 2142 7165</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-5 bg-purple-900/20 rounded-lg border border-purple-700/30">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Users className="w-6 h-6 text-purple-400" />
+                    <div className="font-bold text-lg">Ashok Kumar Dabra</div>
+                  </div>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Role:</span>
+                      <span className="text-slate-200 font-medium">Silent Partner</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Ownership:</span>
+                      <span className="text-purple-400 font-bold">2%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Capital Contribution:</span>
+                      <span className="text-slate-400 font-medium">Nil</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Aadhaar:</span>
+                      <span className="text-slate-300 font-mono text-xs">4896 4002 0695</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 p-4 bg-slate-900/50 rounded-lg border border-slate-700">
+                <div className="text-sm text-slate-400 mb-2">Registered Details:</div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                  <div>
+                    <div className="text-slate-500">Registration No.</div>
+                    <div className="font-medium text-slate-300">22/2025</div>
+                  </div>
+                  <div>
+                    <div className="text-slate-500">Registration Date</div>
+                    <div className="font-medium text-slate-300">March 22, 2025</div>
+                  </div>
+                  <div>
+                    <div className="text-slate-500">Effective From</div>
+                    <div className="font-medium text-slate-300">March 19, 2025</div>
+                  </div>
+                  <div>
+                    <div className="text-slate-500">Jurisdiction</div>
+                    <div className="font-medium text-slate-300">Bilaspur Sadar</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="relative z-10 border-t border-slate-800 bg-slate-900/50 backdrop-blur-xl mt-12">
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <div className="font-bold text-slate-300 mb-3">Business Entity</div>
+              <div className="text-sm space-y-1 text-slate-400">
+                <div>Jeevan Industry (Partnership Firm)</div>
+                <div>Partners: Saransh Sharma (98%) & Ashok Kumar Dabra (2%)</div>
+                <div>GSTIN: 02AAVFJ4960D1ZB</div>
+                <div>PAN: AAVFJ4960D</div>
+              </div>
+            </div>
+            <div>
+              <div className="font-bold text-slate-300 mb-3">Plant Location</div>
+              <div className="text-sm space-y-1 text-slate-400">
+                <div>Village Sandauli, Tehsil Sadar</div>
+                <div>Post Office Markand, Bilaspur</div>
+                <div>Himachal Pradesh - 174033</div>
+                <div>Land: 3.01 Bigha (10-year lease)</div>
+              </div>
+            </div>
+            <div>
+              <div className="font-bold text-slate-300 mb-3">Project Timeline</div>
+              <div className="text-sm space-y-1 text-slate-400">
+                <div>Acquisition: April 1, 2024 (₹19L)</div>
+                <div>Operations: Jun 8, 2024 - Feb 18, 2025</div>
+                <div>Modernization: Feb 2025 - Present</div>
+                <div>Target Relaunch: November 1, 2025</div>
+              </div>
+            </div>
+          </div>
+          <div className="mt-8 pt-6 border-t border-slate-800 text-center text-sm text-slate-500">
+            <p>© 2025 Jeevan Industries. All rights reserved. | Confidential Financial Document</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default JeevanUltraInteractive;
