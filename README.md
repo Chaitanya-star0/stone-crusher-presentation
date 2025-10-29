@@ -1,4 +1,5 @@
 # Jeevan Industries - Banking Presentation
+
 ## Stone Crushing Plant Modernization Project
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -40,85 +41,65 @@ A professional banking presentation web application for Jeevan Industries' stone
 **Capacity**: 800 MT/day (240,000 MT annually)  
 
 ### Key Financial Metrics
-- **Average DSCR**: 8.64x (Excellent Coverage)
-- **Internal Rate of Return**: 32.5% 
-- **Payback Period**: 3.2 Years
-- **Net Present Value**: ₹2.8 Crores @ 12% Discount Rate
+- **Revenue (Year 1)**: ₹4.8 Crores
+- **EBITDA Margin**: 35-40%
+- **Projected IRR**: 28%
+- **Payback Period**: 4.5 years
+- **DSCR**: Above 2.0x (Excellent)
 
-## 🛠️ Technical Stack
+## 🚀 Technology Stack
 
-- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
-- **Charts**: Chart.js with custom fallback implementation
-- **Data Processing**: Real-time CSV parsing and visualization
-- **Styling**: Professional CSS with CSS Custom Properties
-- **Deployment**: GitHub Pages with custom domain support
+### Frontend
+- **HTML5**: Semantic markup for accessibility
+- **CSS3**: Modern styling with CSS Grid and Flexbox
+- **JavaScript (ES6+)**: Modern vanilla JavaScript
+- **Chart.js**: Data visualization library
+
+### Data Processing
+- **Custom CSV Parser**: Client-side data processing
+- **SimpleChart**: Fallback charting for restricted environments
+- **Real-time Calculations**: Dynamic financial metrics
+
+### Deployment
+- **GitHub Pages**: Static site hosting
+- **GitHub Actions**: Automated CI/CD pipeline
+- **Custom Domain Support**: Ready for custom domain configuration
 
 ## 📁 Project Structure
 
 ```
+stone-crusher-presentation/
 ├── index.html              # Main presentation file
-├── style.css               # Professional banking theme styles
-├── app.js                  # Core application logic
-├── data-processor.js       # CSV data processing and chart generation
-├── simple-chart.js         # Fallback chart implementation
-├── data/                   # Financial data files
-│   ├── pl_projections.csv           # Profit & Loss projections
-│   ├── balance_sheet_projections.csv # Balance sheet data
-│   ├── dscr_data.csv               # Debt service coverage ratios
-│   └── machinery_breakdown.csv     # Equipment cost breakdown
-└── README.md               # Project documentation
+├── style.css              # Styling and animations
+├── app.js                 # Main application logic
+├── data-processor.js      # CSV parsing and data handling
+├── simple-chart.js        # Fallback charting library
+├── data/                  # Financial data (CSV files)
+│   ├── pl_projections.csv
+│   ├── balance_sheet.csv
+│   └── machinery_costs.csv
+└── .github/
+    └── workflows/
+        └── pages.yml      # GitHub Pages deployment
 ```
 
-## 🚀 Quick Start
+## 🎨 Design Philosophy
 
-### Local Development
-```bash
-# Clone the repository
-git clone https://github.com/Chaitanya-star0/stone-crusher-presentation.git
-cd stone-crusher-presentation
+### Color Scheme
+- **Primary Navy (#0a2463)**: Trust and professionalism
+- **Accent Teal (#00a8cc)**: Modern and dynamic
+- **Success Green (#28a745)**: Positive indicators
+- **Warning Amber (#ffc107)**: Attention markers
+- **Error Red (#dc3545)**: Critical alerts
 
-# Start local server
-python3 -m http.server 8000
-# or
-npx serve .
+### Typography
+- **Headings**: 'Segoe UI', system fonts for clarity
+- **Body**: Optimized for readability with proper line height
+- **Data**: Monospace fonts for numerical precision
 
-# Open browser
-open http://localhost:8000
-```
-
-### GitHub Pages Deployment
-The presentation is automatically deployed to GitHub Pages from the main branch. Any updates to the main branch will trigger automatic deployment.
-
-## 📈 Data Integration
-
-The application dynamically processes real financial data from CSV files:
-
-### Financial Projections (`pl_projections.csv`)
-- 7-year revenue projections (₹825L to ₹2,419L)
-- EBITDA and PAT calculations
-- Tax and depreciation scheduling
-
-### DSCR Analysis (`dscr_data.csv`)
-- Debt service coverage ratios (5.97x to 437.03x)
-- Debt service amounts and trends
-- Color-coded performance indicators
-
-### Balance Sheet (`balance_sheet_projections.csv`)
-- Asset growth projections
-- Capital structure evolution
-- Term loan repayment schedule
-
-### Machinery Investment (`machinery_breakdown.csv`)
-- Equipment cost breakdown
-- Component-wise investment analysis
-- GST calculations
-
-## 🎨 Design Features
-
-### Professional Banking Theme
-- **Primary Colors**: Navy Blue (#1e3a8a), Teal (#0d9488)
-- **Typography**: Professional Segoe UI font stack
-- **Layout**: Card-based design with subtle shadows and animations
+### User Experience
+- **Navigation**: Sticky header with smooth scrolling
+- **Interactions**: Subtle hover effects and transitions
 - **Accessibility**: High contrast ratios and keyboard navigation support
 
 ### Interactive Elements
@@ -130,6 +111,7 @@ The application dynamically processes real financial data from CSV files:
 ## 📱 Responsive Design
 
 The presentation is fully responsive across all device sizes:
+
 - **Desktop**: Full-featured presentation with all charts and data
 - **Tablet**: Optimized layout with touch-friendly navigation
 - **Mobile**: Compact design with essential information prioritized
@@ -175,3 +157,5 @@ Project Manager, Jeevan Industries
 ---
 
 **© 2025 M/s Jeevan Industries. Professional banking presentation for stone crushing plant modernization project.**
+
+*Last updated: October 29, 2025 - GitHub Pages deployment configured*
